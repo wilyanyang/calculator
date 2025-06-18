@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Harga Jual Shopee</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for Inter font and general body */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align items to the start to allow scrolling */
+            min-height: 100vh;
+            padding: 2.5rem 1.5rem;
+        }
+
+        /* Main container styling */
+        .main-container {
+            max-width: 960px; /* Wider max-width */
+            width: 100%;
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem; /* Consistent spacing between major sections */
+        }
+
+        /* Header styling */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background-color: #f3e8ff; /* Light purple for header background */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+        }
+        .app-header h1 {
+            font-size: 2.25rem; /* text-3xl */
+            font-weight: 800; /* font-extrabold */
+            color: #6d28d9; /* Deep purple text */
+            line-height: 1.2;
+        }
+        .app-header p {
+            font-size: 1rem;
+            color: #7e22ce;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        .app-header svg {
+            width: 2.5rem; /* Icon size */
+            height: 2.5rem;
+            color: #8b5cf6; /* Purple icon color */
+            flex-shrink: 0;
+        }
+
+
+        /* Section card styling */
+        .section-card {
+            background-color: #f8fafc; /* Very light blue-gray for sections */
+            border-radius: 1rem;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.03); /* Subtle inner shadow */
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .section-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+        .section-card-header h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #2d3748; /* Dark gray */
+        }
+        .section-card-header svg {
+            width: 1.75rem;
+            height: 1.75rem;
+            color: #6d28d9; /* Purple icon */
+            flex-shrink: 0;
+        }
+
+        /* Input field group styles */
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* Space between icon and label/input */
+            background-color: #ffffff;
+            border-radius: 0.625rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .input-group label {
+            flex-grow: 1; /* Label takes available space */
+            font-weight: 500;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        .input-group input[type="number"] {
+            width: auto; /* Auto width to shrink-wrap content */
+            min-width: 6rem; /* Minimum width for input field */
+            padding: 0.4rem 0.6rem;
+            border: none;
+            border-radius: 0.4rem;
+            font-size: 1rem;
+            color: #2d3748;
+            background-color: #f7fafc;
+            text-align: right; /* Values aligned right */
+            transition: all 0.2s ease-in-out;
+        }
+        .input-group input[type="number"]:focus {
+            outline: none;
+            background-color: #eef2ff; /* Light purple on focus */
+        }
+        .input-group svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #6d28d9; /* Purple icon */
+            flex-shrink: 0;
+        }
+
+        /* Product Modal Input specific styling */
+        .product-modal-section {
+            background-color: #eef2ff; /* Light blue/purple background */
+            border: 1px solid #c7d2fe; /* Matching border color */
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.1); /* Subtle shadow */
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+        }
+        .product-modal-input-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .product-modal-input-group label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #5b21b6; /* Darker purple text for label */
+        }
+        .product-modal-input-group input {
+            flex-grow: 1;
+            font-size: 1.5rem; /* Larger font for product cost */
+            font-weight: 700; /* Bolder font */
+            color: #6d28d9; /* Deep purple text */
+            text-align: left; /* Keep left aligned for input */
+            padding: 0.75rem 1rem;
+            background-color: #ffffff;
+            border: 1px solid #a78bfa;
+            border-radius: 0.5rem;
+        }
+        .product-modal-input-group input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+        }
+        .product-modal-input-group svg {
+            width: 1.75rem;
+            height: 1.75rem;
+            color: #6d28d9; /* Purple icon */
+            flex-shrink: 0;
+        }
+
+        /* Calculate Button */
+        .calculate-button {
+            background-image: linear-gradient(to right, #8b5cf6, #6366f1); /* Purple to indigo gradient */
+            color: white;
+            font-weight: 700;
+            padding: 0.8rem 2.5rem;
+            border-radius: 9999px; /* rounded-full */
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 0 auto; /* Center the button */
+        }
+        .calculate-button:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+            transform: translateY(-2px);
+        }
+        .calculate-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(139, 92, 246, 0.3);
+        }
+        .calculate-button svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        /* Result Section styling */
+        .results-section {
+            background-color: #f8fafc; /* Similar to input settings card */
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Stronger shadow for results */
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Optimal Price display */
+        .optimal-price-display {
+            background-color: #f3e8ff; /* Light purple */
+            border: 2px solid #d8b4fe; /* Purple border */
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .optimal-price-display h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #7e22ce;
+            margin-bottom: 0.5rem;
+        }
+        .optimal-price-display p.price {
+            font-size: 3.8rem;
+            font-weight: 800;
+            color: #6d28d9;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .optimal-price-display p.subtitle {
+            font-size: 0.95rem;
+            color: #a78bfa;
+        }
+        .optimal-price-display svg {
+            width: 2.2rem;
+            height: 2.2rem;
+            color: #a78bfa;
+            margin-bottom: 0.5rem;
+            display: inline-block; /* Aligns with text */
+            vertical-align: middle;
+        }
+
+        /* Summary cards (Modal, Total Cost, Net Margin) */
+        .summary-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .summary-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            padding: 1.25rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .summary-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        .summary-card p {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2d3748;
+            line-height: 1.2;
+        }
+        .summary-card svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-bottom: 0.4rem;
+            flex-shrink: 0;
+        }
+
+        /* Specific summary card colors */
+        .summary-card.modal-cost svg { color: #10b981; } /* Green */
+        .summary-card.total-cost svg { color: #ef4444; } /* Red */
+        .summary-card.net-margin-summary svg { color: #3b82f6; } /* Blue */
+
+        /* Percentage Cost Card */
+        .percentage-cost-card {
+            background-color: #d1fae5; /* Light green */
+            border: 2px solid #86efac;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .percentage-cost-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+        .percentage-cost-card p {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #047857;
+            line-height: 1;
+        }
+        .percentage-cost-card svg {
+            width: 1.75rem;
+            height: 1.75rem;
+            color: #059669;
+            margin-bottom: 0.5rem;
+            flex-shrink: 0;
+        }
+
+
+        /* Cost Breakdown Table */
+        .cost-breakdown-table-container {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            overflow: hidden; /* Ensures rounded corners apply */
+        }
+        .cost-breakdown-table {
+            width: 100%;
+            border-collapse: collapse; /* Collapse borders for a clean look */
+        }
+
+        .cost-breakdown-table th,
+        .cost-breakdown-table td {
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            text-align: left;
+            border-bottom: 1px solid #edf2f7; /* Lighter row separator */
+        }
+
+        .cost-breakdown-table thead th {
+            background-color: #f0f4f8; /* Light blue-gray for header */
+            color: #4a5568;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+        .cost-breakdown-table thead th:nth-child(2),
+        .cost-breakdown-table thead th:nth-child(3) {
+            text-align: right; /* Align Percentage and Amount headers to right */
+        }
+
+        .cost-breakdown-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .cost-breakdown-table tbody tr:nth-child(odd) {
+            background-color: #f7fafc; /* Subtle stripe for readability */
+        }
+        .cost-breakdown-table td:nth-child(2),
+        .cost-breakdown-table td:nth-child(3) {
+            text-align: right; /* Align percentage and amount columns to right */
+            font-weight: 500;
+            color: #2d3748;
+        }
+        .cost-breakdown-table tr.total-row {
+            background-color: #dbeafe; /* Light blue for total row */
+            font-weight: 700;
+            color: #2563eb;
+        }
+        .cost-breakdown-table tr.total-row td {
+            font-weight: 700; /* Ensure total values are bold */
+        }
+
+        /* Warning message */
+        .warning-message {
+            background-color: #fef2f2; /* Light red */
+            border: 1px solid #fca5a5; /* Red border */
+            color: #dc2626; /* Dark red text */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .warning-message svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #ef4444; /* Brighter red icon */
+            flex-shrink: 0;
+        }
+
+        /* Net margin color indicators (for finalNetMargin p tag) */
+        .net-margin-positive {
+            color: #16a34a; /* Deeper green */
+        }
+
+        .net-margin-negative {
+            color: #dc2626; /* Deeper red */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center py-12 px-4">
+    <div class="main-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <!-- Calculator Icon (Inline SVG) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator">
+                <rect width="16" height="20" x="4" y="2" rx="2" ry="2"/>
+                <line x1="8" x2="16" y1="6" y2="6"/>
+                <line x1="8" x2="16" y1="10" y2="10"/>
+                <line x1="8" x2="16" y1="14" y2="14"/>
+                <line x1="8" x2="16" y1="18" y2="18"/>
+            </svg>
+            <div>
+                <h1>Kalkulator Harga Jual Shopee</h1>
+                <p>Hitung harga jual optimal dengan margin bersih target Anda</p>
+            </div>
+        </header>
+
+        <!-- Pengaturan Biaya Section -->
+        <section class="section-card">
+            <div class="section-card-header">
+                <!-- Settings Icon (Inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.08a2 2 0 0 1 1 1.73v.54a2 2 0 0 1-1 1.73l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 1 1.73v.18a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.73v-.54a2 2 0 0 1 1-1.73l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <h2>Pengaturan Biaya</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Biaya Admin Kategori -->
+                <div class="input-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tag">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.08a2 2 0 0 1 1 1.73v.54a2 2 0 0 1-1 1.73l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 1 1.73v.18a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.73v-.54a2 2 0 0 1 1-1.73l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <label for="shopeeCategoryFee">Biaya Admin Kategori (%)</label>
+                    <input type="number" id="shopeeCategoryFee" value="8">
+                </div>
+
+                <!-- Gratis Ongkir Extra -->
+                <div class="input-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck">
+                        <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h11"/>
+                        <path d="M19 18h2v-3.3a2 2 0 0 0-.7-1.5L14 6h3a2 2 0 0 1 2 2v4a2 2 0 0 1 2 2v2h-2"/>
+                        <circle cx="7" cy="18" r="2"/>
+                        <path d="M17 18h2"/>
+                        <circle cx="17" cy="18" r="2"/>
+                    </svg>
+                    <label for="freeShippingExtra">Gratis Ongkir Extra (%)</label>
+                    <input type="number" id="freeShippingExtra" value="4">
+                </div>
+
+                <!-- Promo Extra -->
+                <div class="input-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gift">
+                        <polyline points="20 12 12 12 12 20"/>
+                        <path d="M12 20v-8H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-8"/>
+                        <path d="M12 20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-8"/>
+                    </svg>
+                    <label for="extraPromo">Promo Extra (%)</label>
+                    <input type="number" id="extraPromo" value="2">
+                </div>
+
+                <!-- Biaya Baru per Transaksi (Flat Platform Fee) -->
+                <div class="input-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-receipt">
+                        <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/>
+                        <path d="M12 8h6"/>
+                        <path d="M12 12h6"/>
+                        <path d="M12 16h6"/>
+                    </svg>
+                    <label for="flatPlatformFee">Biaya Baru per Transaksi (Rp)</label>
+                    <input type="number" id="flatPlatformFee" value="1250">
+                </div>
+
+                <!-- Biaya Afiliasi -->
+                <div class="input-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87L16 11l1 2H9"/>
+                        <path d="M19 7c1.4 0 2-2 2-2"/>
+                    </svg>
+                    <label for="affiliateFee">Biaya Afiliasi (%)</label>
+                    <input type="number" id="affiliateFee" value="10">
+                </div>
+
+                <!-- ROI Iklan -->
+                <div class="input-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone">
+                        <path d="m3 11 18-5v12L3 14v-3z"/>
+                        <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+                    </svg>
+                    <label for="adsROI">ROI Iklan (x)</label>
+                    <input type="number" id="adsROI" value="5">
+                </div>
+
+                <!-- Biaya Packing -->
+                <div class="input-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package">
+                        <path d="m7.5 4.27 9 5.15"/>
+                        <path d="M2.5 8.63 12 14l9.5-5.37"/>
+                        <polyline points="7.5 14.33 7.5 20.73 17 15.33 17 8.93"/>
+                        <path d="M2.5 16.5V22h19v-5.5"/>
+                        <path d="M12 2L6 5 2 8v8l4 3 6 3 6-3 4-3V8l-4-3-6-3z"/>
+                    </svg>
+                    <label for="packingFee">Biaya Packing (Rp)</label>
+                    <input type="number" id="packingFee" value="1000">
+                </div>
+
+                <!-- Target Margin Bersih -->
+                <div class="input-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-percent">
+                        <line x1="19" x2="5" y1="5" y2="19"/>
+                        <circle cx="6.5" cy="6.5" r="2.5"/>
+                        <circle cx="17.5" cy="17.5" r="2.5"/>
+                    </svg>
+                    <label for="targetNetMargin">Target Margin Bersih (%)</label>
+                    <input type="number" id="targetNetMargin" value="5">
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal Produk Section -->
+        <section class="product-modal-section">
+            <div class="product-modal-input-group">
+                <!-- Shopping Bag Icon (Inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag">
+                    <path d="M6 2L3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-3-5Z"/>
+                    <line x1="3" x2="21" y1="7" y2="7"/>
+                    <path d="M12 20v-9"/>
+                    <path d="M16 11V7a4 4 0 0 0-8 0v4"/>
+                </svg>
+                <label for="productCost">Modal Produk (Rp)</label>
+                <input type="number" id="productCost" placeholder="Cth: 70000">
+            </div>
+        </section>
+
+        <!-- Calculate Button -->
+        <div class="text-center">
+            <button id="calculateButton" class="calculate-button">
+                <!-- Sparkle Icon (Inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles">
+                    <path d="M9.9 10H1.5L9 2.2 12.3 8h8.4L15 22.3 11.7 16h-8.4z"/>
+                </svg>
+                Hitung Harga Jual
+            </button>
+        </div>
+
+        <!-- Output Section - Initially hidden -->
+        <section id="results" class="results-section hidden opacity-0 transition-opacity duration-500">
+            <!-- Optimal Selling Price Display -->
+            <div class="optimal-price-display">
+                <!-- Gem Icon (Inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gem">
+                    <path d="M6 3h12l6 9-6 9H6L0 12Z"/>
+                    <path d="m12 3 6 9-6 9-6-9 6-9Z"/>
+                    <path d="M12 3v18"/>
+                </svg>
+                <h3>Harga Jual Optimal</h3>
+                <p id="optimalSellingPrice" class="price">Rp 0</p>
+                <p id="optimalPriceSubtitle" class="subtitle">Untuk mendapatkan margin bersih 0.0%</p>
+            </div>
+
+            <!-- Summary Cards (Modal, Total Cost, Net Margin) -->
+            <div class="summary-card-grid">
+                <div class="summary-card modal-cost">
+                    <!-- Wallet Icon (Inline SVG) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet">
+                        <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h12a2 2 0 0 1 0 4H5a2 2 0 0 0 0 4h12a2 2 0 0 0 2-2v-3"/>
+                        <path d="M22 7v3"/>
+                        <path d="M22 13v3"/>
+                    </svg>
+                    <h4>Modal Produk</h4>
+                    <p id="displayModalProductCost">Rp 0</p>
+                </div>
+                <div class="summary-card total-cost">
+                    <!-- Dollar Sign Icon (Inline SVG) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign">
+                        <line x1="12" x2="12" y1="2" y2="22"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    <h4>Total Biaya</h4>
+                    <p id="displayCalculatedTotalCost">Rp 0</p>
+                </div>
+                <div class="summary-card net-margin-summary">
+                    <!-- Trending Up Icon (Inline SVG) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up">
+                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                        <polyline points="16 7 22 7 22 13"/>
+                    </svg>
+                    <h4>Margin Bersih</h4>
+                    <p id="displaySummaryNetMargin">Rp 0</p>
+                </div>
+            </div>
+
+            <!-- Percentage Cost Card -->
+            <div class="percentage-cost-card">
+                <!-- Percent Icon (Inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-percent">
+                    <line x1="19" x2="5" y1="5" y2="19"/>
+                    <circle cx="6.5" cy="6.5" r="2.5"/>
+                    <circle cx="17.5" cy="17.5" r="2.5"/>
+                </svg>
+                <h4>Persentase Biaya</h4>
+                <p id="displayOverallFeePercentage">0.00%</p>
+            </div>
+
+            <!-- Cost Breakdown Table -->
+            <div class="cost-breakdown-table-container">
+                <table class="cost-breakdown-table">
+                    <thead>
+                        <tr>
+                            <th>Komponen Biaya</th>
+                            <th>Persentase</th>
+                            <th>Jumlah (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Biaya Admin Kategori</td><td id="tableShopeeCategoryFeePercent"></td><td id="tableShopeeCategoryFee">Rp 0</td></tr>
+                        <tr><td>Gratis Ongkir Extra</td><td id="tableFreeShippingExtraPercent"></td><td id="tableFreeShippingExtra">Rp 0</td></tr>
+                        <tr><td>Promo Extra</td><td id="tableExtraPromoPercent"></td><td id="tableExtraPromo">Rp 0</td></tr>
+                        <tr><td>Biaya Baru (Flat)</td><td>-</td><td id="tableFlatPlatformFee">Rp 0</td></tr>
+                        <tr><td>Biaya Afiliasi</td><td id="tableAffiliateFeePercent"></td><td id="tableAffiliateFee">Rp 0</td></tr>
+                        <tr><td>Biaya Iklan (ROI 5 + PPN)</td><td id="tableAdsCostPercent"></td><td id="tableAdsCost">Rp 0</td></tr>
+                        <tr><td>Biaya Packing</td><td>-</td><td id="tablePackingFee">Rp 0</td></tr>
+                        <tr class="total-row"><td>Total Biaya (Shopee)</td><td id="tableTotalShopeeFeesPercent"></td><td id="tableTotalShopeeFees">Rp 0</td></tr>
+                        <tr class="total-row"><td>Total Biaya (Shopee) + Packing</td><td>-</td><td id="tableTotalShopeeFeesPlusPacking">Rp 0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Warning Message -->
+            <div id="warningMessage" class="warning-message hidden">
+                <!-- Alert Triangle Icon (Inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/>
+                    <path d="M12 9v4"/>
+                    <path d="M12 17h.01"/>
+                </svg>
+                <span id="warningMessageText"></span>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all input elements
+            const inputs = {
+                shopeeCategoryFee: document.getElementById('shopeeCategoryFee'),
+                freeShippingExtra: document.getElementById('freeShippingExtra'),
+                extraPromo: document.getElementById('extraPromo'),
+                flatPlatformFee: document.getElementById('flatPlatformFee'),
+                affiliateFee: document.getElementById('affiliateFee'),
+                adsROI: document.getElementById('adsROI'),
+                packingFee: document.getElementById('packingFee'),
+                targetNetMargin: document.getElementById('targetNetMargin'),
+                productCost: document.getElementById('productCost')
+            };
+
+            // Get all output elements
+            const outputs = {
+                optimalSellingPrice: document.getElementById('optimalSellingPrice'),
+                optimalPriceSubtitle: document.getElementById('optimalPriceSubtitle'),
+                displayModalProductCost: document.getElementById('displayModalProductCost'),
+                displayCalculatedTotalCost: document.getElementById('displayCalculatedTotalCost'),
+                displaySummaryNetMargin: document.getElementById('displaySummaryNetMargin'),
+                displayOverallFeePercentage: document.getElementById('displayOverallFeePercentage'),
+                
+                // Table outputs
+                tableShopeeCategoryFee: document.getElementById('tableShopeeCategoryFee'),
+                tableFreeShippingExtra: document.getElementById('tableFreeShippingExtra'),
+                tableExtraPromo: document.getElementById('tableExtraPromo'),
+                tableFlatPlatformFee: document.getElementById('tableFlatPlatformFee'),
+                tableAffiliateFee: document.getElementById('tableAffiliateFee'),
+                tableAdsCost: document.getElementById('tableAdsCost'),
+                tablePackingFee: document.getElementById('tablePackingFee'),
+                tableTotalShopeeFees: document.getElementById('tableTotalShopeeFees'), // Total Biaya (Shopee)
+                tableTotalShopeeFeesPlusPacking: document.getElementById('tableTotalShopeeFeesPlusPacking'), // New output element
+
+                // Table percentages
+                tableShopeeCategoryFeePercent: document.getElementById('tableShopeeCategoryFeePercent'),
+                tableFreeShippingExtraPercent: document.getElementById('tableFreeShippingExtraPercent'),
+                tableExtraPromoPercent: document.getElementById('tableExtraPromoPercent'),
+                tableAffiliateFeePercent: document.getElementById('tableAffiliateFeePercent'),
+                tableAdsCostPercent: document.getElementById('tableAdsCostPercent'),
+                tableTotalShopeeFeesPercent: document.getElementById('tableTotalShopeeFeesPercent'),
+
+                resultsSection: document.getElementById('results'),
+                warningMessage: document.getElementById('warningMessage'),
+                warningMessageText: document.getElementById('warningMessageText')
+            };
+
+            let debounceTimer;
+
+            // Function to format number as Rupiah
+            const formatRupiah = (amount) => {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(amount);
+            };
+
+            // Function to format percentage
+            const formatPercentage = (value) => {
+                return value.toFixed(2) + '%';
+            };
+
+            const calculateAndDisplayPrice = () => {
+                // Get values from inputs, parse as float. Default to 0 if empty or invalid.
+                const shopeeCategoryFeeRate = parseFloat(inputs.shopeeCategoryFee.value) / 100 || 0;
+                const freeShippingExtraRate = parseFloat(inputs.freeShippingExtra.value) / 100 || 0;
+                const extraPromoRate = parseFloat(inputs.extraPromo.value) / 100 || 0;
+                const flatPlatformFee = parseFloat(inputs.flatPlatformFee.value) || 0;
+                const affiliateFeeRate = parseFloat(inputs.affiliateFee.value) / 100 || 0;
+                const adsROI = parseFloat(inputs.adsROI.value) || 1; // Prevent division by zero
+                const packingFee = parseFloat(inputs.packingFee.value) || 0;
+                const targetNetMarginRate = parseFloat(inputs.targetNetMargin.value) / 100 || 0;
+                const productCost = parseFloat(inputs.productCost.value) || 0;
+
+                // Hide warning initially
+                outputs.warningMessage.classList.add('hidden');
+                outputs.warningMessageText.textContent = '';
+
+                // Basic validation: ensure ROI is not zero or negative
+                if (adsROI <= 0) {
+                    outputs.optimalSellingPrice.textContent = "ROI Tidak Valid";
+                    outputs.optimalPriceSubtitle.textContent = "";
+                    outputs.displayModalProductCost.textContent = "Rp 0";
+                    outputs.displayCalculatedTotalCost.textContent = "Rp 0";
+                    outputs.displaySummaryNetMargin.textContent = "Rp 0";
+                    outputs.displayOverallFeePercentage.textContent = "0.00%";
+                    outputs.tableShopeeCategoryFee.textContent = "Rp 0";
+                    outputs.tableFreeShippingExtra.textContent = "Rp 0";
+                    outputs.tableExtraPromo.textContent = "Rp 0";
+                    outputs.tableFlatPlatformFee.textContent = "Rp 0";
+                    outputs.tableAffiliateFee.textContent = "Rp 0";
+                    outputs.tableAdsCost.textContent = "Rp 0";
+                    outputs.tablePackingFee.textContent = "Rp 0";
+                    outputs.tableTotalShopeeFees.textContent = "Rp 0";
+                    outputs.tableTotalShopeeFeesPlusPacking.textContent = "Rp 0"; // New output reset
+                    outputs.tableShopeeCategoryFeePercent.textContent = "";
+                    outputs.tableFreeShippingExtraPercent.textContent = "";
+                    outputs.tableExtraPromoPercent.textContent = "";
+                    outputs.tableAffiliateFeePercent.textContent = "";
+                    outputs.tableAdsCostPercent.textContent = "";
+                    outputs.tableTotalShopeeFeesPercent.textContent = "";
+                    
+                    outputs.warningMessage.classList.remove('hidden');
+                    outputs.warningMessageText.textContent = "Peringatan: ROI Iklan harus lebih besar dari 0.";
+                    outputs.resultsSection.classList.remove('hidden', 'opacity-0');
+                    return;
+                }
+                
+                // Ads rate considering VAT (1.11 multiplier)
+                const adsRate = (1 / adsROI) * 1.11;
+
+                // Sum of all percentage-based fees (as decimals)
+                const totalPercentageFeesRate = shopeeCategoryFeeRate + freeShippingExtraRate + extraPromoRate + affiliateFeeRate + adsRate;
+
+                // Calculate the denominator for the selling price formula
+                // 1 - (all percentage-based fees) - target_margin_rate
+                const denominator = 1 - totalPercentageFeesRate - targetNetMarginRate;
+
+                // Ensure denominator is positive to avoid infinite/negative selling price
+                if (denominator <= 0) {
+                    outputs.optimalSellingPrice.textContent = "Tidak Tercapai";
+                    outputs.optimalPriceSubtitle.textContent = "Margin target tidak dapat dicapai dengan biaya ini.";
+                    outputs.displayModalProductCost.textContent = formatRupiah(productCost);
+                    outputs.displayCalculatedTotalCost.textContent = "Rp 0"; // Cannot calculate total costs meaningfully
+                    outputs.displaySummaryNetMargin.textContent = "Rp 0";
+                    outputs.displayOverallFeePercentage.textContent = formatPercentage(totalPercentageFeesRate * 100);
+
+                    // Reset breakdown
+                    outputs.tableShopeeCategoryFee.textContent = "Rp 0";
+                    outputs.tableFreeShippingExtra.textContent = "Rp 0";
+                    outputs.tableExtraPromo.textContent = "Rp 0";
+                    outputs.tableFlatPlatformFee.textContent = formatRupiah(flatPlatformFee);
+                    outputs.tableAffiliateFee.textContent = "Rp 0";
+                    outputs.tableAdsCost.textContent = "Rp 0";
+                    outputs.tablePackingFee.textContent = formatRupiah(packingFee);
+                    outputs.tableTotalShopeeFees.textContent = "Rp 0";
+                    outputs.tableTotalShopeeFeesPlusPacking.textContent = "Rp 0"; // New output reset
+
+                    outputs.tableShopeeCategoryFeePercent.textContent = formatPercentage(shopeeCategoryFeeRate * 100);
+                    outputs.tableFreeShippingExtraPercent.textContent = formatPercentage(freeShippingExtraRate * 100);
+                    outputs.tableExtraPromoPercent.textContent = formatPercentage(extraPromoRate * 100);
+                    outputs.tableAffiliateFeePercent.textContent = formatPercentage(affiliateFeeRate * 100);
+                    outputs.tableAdsCostPercent.textContent = formatPercentage(adsRate * 100);
+                    outputs.tableTotalShopeeFeesPercent.textContent = formatPercentage(totalPercentageFeesRate * 100);
+
+                    outputs.warningMessage.classList.remove('hidden');
+                    outputs.warningMessageText.textContent = "Peringatan: Total persentase biaya (termasuk target margin) melebihi 100%. Tidak dapat menghitung harga jual optimal. Pertimbangkan efisiensi biaya atau strategi bundling.";
+                    outputs.resultsSection.classList.remove('hidden', 'opacity-0');
+                    outputs.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    return;
+                }
+
+                // Final Formula: selling_price = (product_cost + flat_fee + packing_fee) / (1 - total_percentage_fees - target_margin)
+                const sellingPrice = (productCost + flatPlatformFee + packingFee) / denominator;
+
+                // Calculate individual costs based on the calculated selling price
+                const shopeeCategoryFeeCost = sellingPrice * shopeeCategoryFeeRate;
+                const freeShippingExtraCost = sellingPrice * freeShippingExtraRate;
+                const extraPromoCost = sellingPrice * extraPromoRate;
+                const affiliateFeeCost = sellingPrice * affiliateFeeRate;
+                const adsCost = sellingPrice * adsRate;
+
+                // Total Shopee Fees (for display, includes flat platform fee)
+                const totalShopeeFeesCalculated = shopeeCategoryFeeCost + freeShippingExtraCost + extraPromoCost + flatPlatformFee + affiliateFeeCost + adsCost;
+
+                // New calculation: Total Biaya (Shopee) + Packing
+                const totalShopeeFeesPlusPackingCalculated = totalShopeeFeesCalculated + packingFee;
+
+                // Total Cost (including product cost and all fees)
+                const totalCostIncludingProductAndFees = productCost + totalShopeeFeesPlusPackingCalculated; // Updated to use new subtotal
+
+                // Final Net Margin (Rp)
+                const finalNetMarginRp = sellingPrice - totalCostIncludingProductAndFees;
+                const finalNetMarginPercentage = (finalNetMarginRp / sellingPrice) * 100;
+
+                // Update Output elements
+                outputs.optimalSellingPrice.textContent = formatRupiah(sellingPrice);
+                outputs.optimalPriceSubtitle.textContent = `Untuk mendapatkan margin bersih ${formatPercentage(targetNetMarginRate * 100)}`;
+                
+                outputs.displayModalProductCost.textContent = formatRupiah(productCost);
+                outputs.displayCalculatedTotalCost.textContent = formatRupiah(totalCostIncludingProductAndFees);
+                outputs.displaySummaryNetMargin.textContent = formatRupiah(finalNetMarginRp);
+                // Apply color to summary net margin based on target
+                outputs.displaySummaryNetMargin.classList.remove('net-margin-positive', 'net-margin-negative');
+                if (finalNetMarginPercentage >= (targetNetMarginRate * 100 - 0.01)) { // Allow a tiny tolerance for floating point
+                    outputs.displaySummaryNetMargin.classList.add('net-margin-positive');
+                } else {
+                    outputs.displaySummaryNetMargin.classList.add('net-margin-negative');
+                }
+
+                outputs.displayOverallFeePercentage.textContent = formatPercentage(totalPercentageFeesRate * 100);
+
+                // Update Cost Breakdown Table
+                outputs.tableShopeeCategoryFee.textContent = formatRupiah(shopeeCategoryFeeCost);
+                outputs.tableFreeShippingExtra.textContent = formatRupiah(freeShippingExtraCost);
+                outputs.tableExtraPromo.textContent = formatRupiah(extraPromoCost);
+                outputs.tableFlatPlatformFee.textContent = formatRupiah(flatPlatformFee);
+                outputs.tableAffiliateFee.textContent = formatRupiah(affiliateFeeCost);
+                outputs.tableAdsCost.textContent = formatRupiah(adsCost);
+                outputs.tablePackingFee.textContent = formatRupiah(packingFee);
+                outputs.tableTotalShopeeFees.textContent = formatRupiah(totalShopeeFeesCalculated);
+                outputs.tableTotalShopeeFeesPlusPacking.textContent = formatRupiah(totalShopeeFeesPlusPackingCalculated); // Update new output
+
+                // Update percentage columns for variable costs
+                outputs.tableShopeeCategoryFeePercent.textContent = formatPercentage(shopeeCategoryFeeRate * 100);
+                outputs.tableFreeShippingExtraPercent.textContent = formatPercentage(freeShippingExtraRate * 100);
+                outputs.tableExtraPromoPercent.textContent = formatPercentage(extraPromoRate * 100);
+                outputs.tableAffiliateFeePercent.textContent = formatPercentage(affiliateFeeRate * 100);
+                outputs.tableAdsCostPercent.textContent = formatPercentage(adsRate * 100);
+                outputs.tableTotalShopeeFeesPercent.textContent = formatPercentage(totalPercentageFeesRate * 100);
+
+
+                // Show results section and scroll into view
+                outputs.resultsSection.classList.remove('hidden');
+                setTimeout(() => { // Small delay to allow 'hidden' to be removed before 'opacity-0'
+                    outputs.resultsSection.classList.remove('opacity-0');
+                    outputs.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 10);
+            };
+
+            // Debounce function for input changes (for auto-update, though not initial display)
+            const debounce = (func, delay) => {
+                return function() {
+                    const context = this;
+                    const args = arguments;
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                        // Only trigger if results are already visible (meaning calculate button was clicked)
+                        if (!outputs.resultsSection.classList.contains('hidden')) {
+                            func.apply(context, args);
+                        }
+                    }, delay);
+                };
+            };
+
+            // Attach event listeners to all input fields for auto-update *after* initial calculation
+            for (const key in inputs) {
+                if (inputs.hasOwnProperty(key)) {
+                    inputs[key].addEventListener('input', debounce(calculateAndDisplayPrice, 500));
+                }
+            }
+
+            // Attach event listener to the calculate button
+            document.getElementById('calculateButton').addEventListener('click', calculateAndDisplayPrice);
+
+            // Hide warning message by default
+            outputs.warningMessage.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
